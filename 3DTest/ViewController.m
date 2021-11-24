@@ -14,6 +14,8 @@
 
 @interface ViewController ()
 
+@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat height;
 @property (nonatomic, assign) CGFloat angle;
 @property (nonatomic, assign) CATransform3D transform;
 
@@ -33,35 +35,79 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _width = 200;
+    _height = 100;
     _angle = kDegreesToRadias(20);
-    
     [self initView];
-    
     _transform = CATransform3DIdentity;
     _transform.m34 = 1.0 / -500;
     _transform = CATransform3DRotate(_transform, _angle, -0.1, -0.1, 0);
-    _containerView.layer.sublayerTransform = _transform;
-}
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    self.containerView.layer.sublayerTransform = _transform;
     
-    [self boxFloatAnimation];
+    [self initOutView:0.5];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [btn setTitle:@"动画" forState:UIControlStateNormal];
+    btn.frame = CGRectMake(100, 100, 100, 30);
+    [btn addTarget:self action:@selector(progressBtn:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
 }
 
-#pragma MARK - 合并动画
+#pragma mark - progress
+- (void)progressBtn:(UIButton *)sender {
+    
+    sender.selected =! sender.selected;
+    
+    if (sender.isSelected) {
+        [self boxMergeAnimation];
+    }
+    else {
+        [self boxSpreadAnimation];
+    }
+}
+
+#pragma mark - 合并动画
 - (void)boxMergeAnimation {
     
-    float mergeAngle = kDegreesToRadias(0.1);
+    CGFloat mergeAngle = kDegreesToRadias(1);
+    __block CGFloat outValue = 0;
     __weak typeof(self) weakSelf = self;
-    __block CGFloat transformValue = 5.0;
     NSTimer *timer = [NSTimer timerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
 
-        transformValue -= 0.01;
-        transformValue = transformValue < 1 ? 1 : transformValue;
         weakSelf.transform = CATransform3DRotate(weakSelf.transform, mergeAngle, 1, 1, 0.5);
         weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
         
-        weakSelf.backImgV.layer.transform = CATransform3DTranslate(weakSelf.backImgV.layer.transform, 0, 0, -(weakSelf.backImgV.bounds.size.width / 3));
+        outValue += 0.001;
+        if (outValue <= 0.307) {
+            [weakSelf inViewAnimation:0.5 removeValue:outValue];
+        }
+        else {
+            [timer setFireDate:[NSDate distantFuture]];
+            [weakSelf boxFloatAnimation];
+        }
+    }];
+    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+}
+
+#pragma mark - 散开动画
+- (void)boxSpreadAnimation {
+    
+    CGFloat mergeAngle = -kDegreesToRadias(1);
+    __block CGFloat inValue = 0;
+    __weak typeof(self) weakSelf = self;
+    NSTimer *timer = [NSTimer timerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
+
+        weakSelf.transform = CATransform3DRotate(weakSelf.transform, mergeAngle, 1, 1, 0.5);
+        weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
+        
+        inValue += 0.001;
+        if (inValue <= 0.2) {
+            NSLog(@"intValue == %@", @(inValue));
+            [weakSelf outViewAnimation:0.807 addValue:inValue];
+        }
+        else {
+            [timer setFireDate:[NSDate distantFuture]];
+        }
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
@@ -134,46 +180,79 @@
     finished(rotateValue, boolRotateValue);
 }
 
+#pragma mark - 初始化外围放大视图
+- (void)initOutView:(CGFloat)value {
+    
+    _frontImgV.layer.transform = CATransform3DTranslate(_frontImgV.layer.transform, 0, 0, (_height / value));
+    _backImgV.layer.transform = CATransform3DTranslate(_backImgV.layer.transform, 0, 0, -(_height / value));
+    _leftImgV.layer.transform = CATransform3DTranslate(_leftImgV.layer.transform, 0, 0, -(_height / value));
+    _rightImgV.layer.transform = CATransform3DTranslate(_rightImgV.layer.transform, 0, 0, (_width - _height) / value);
+    _topImgV.layer.transform = CATransform3DTranslate(_topImgV.layer.transform, 0, 0, (_height / value));
+    _bottomImgV.layer.transform = CATransform3DTranslate(_bottomImgV.layer.transform, 0, 0, (_height / value));
+}
+
+#pragma mark - 收缩动画
+- (void)inViewAnimation:(CGFloat)value removeValue:(CGFloat)removeValue {
+    
+    _frontImgV.layer.transform = CATransform3DTranslate(_frontImgV.layer.transform, 0, 0, -(value + removeValue));
+    _backImgV.layer.transform = CATransform3DTranslate(_backImgV.layer.transform, 0, 0, (value + removeValue));
+    _leftImgV.layer.transform = CATransform3DTranslate(_leftImgV.layer.transform, 0, 0, (value + removeValue));
+    _rightImgV.layer.transform = CATransform3DTranslate(_rightImgV.layer.transform, 0, 0, -value - removeValue);
+    _topImgV.layer.transform = CATransform3DTranslate(_topImgV.layer.transform, 0, 0, -(value + removeValue));
+    _bottomImgV.layer.transform = CATransform3DTranslate(_bottomImgV.layer.transform, 0, 0, -(value + removeValue));
+}
+
+#pragma mark - 放大动画
+- (void)outViewAnimation:(CGFloat)value addValue:(CGFloat)addValue {
+    
+    _frontImgV.layer.transform = CATransform3DTranslate(_frontImgV.layer.transform, 0, 0, (value + addValue));
+    _backImgV.layer.transform = CATransform3DTranslate(_backImgV.layer.transform, 0, 0, -(value + addValue));
+    _leftImgV.layer.transform = CATransform3DTranslate(_leftImgV.layer.transform, 0, 0, -(value + addValue));
+    _rightImgV.layer.transform = CATransform3DTranslate(_rightImgV.layer.transform, 0, 0, value + addValue);
+    _topImgV.layer.transform = CATransform3DTranslate(_topImgV.layer.transform, 0, 0, value + addValue);
+    _bottomImgV.layer.transform = CATransform3DTranslate(_bottomImgV.layer.transform, 0, 0, value + addValue);
+}
+
 #pragma mark - 初始化视图
 - (void)initView {
     
     //前
     _frontImgV = [[UIImageView alloc] initWithFrame:self.containerView.bounds];
     _frontImgV.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:1];
-    _frontImgV.layer.transform = CATransform3DTranslate(_frontImgV.layer.transform, 0, 0, _frontImgV.bounds.size.width / 3);
+    _frontImgV.layer.transform = CATransform3DTranslate(_frontImgV.layer.transform, 0, 0, (_height / 2));
     [self.containerView addSubview:_frontImgV];
     
     //后
-    _backImgV = [[UIImageView alloc] initWithFrame:_frontImgV.bounds];
+    _backImgV = [[UIImageView alloc] initWithFrame:self.containerView.bounds];
     _backImgV.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:1];
-    _backImgV.layer.transform = CATransform3DTranslate(_backImgV.layer.transform, 0, 0, -(_backImgV.bounds.size.width / 3));
+    _backImgV.layer.transform = CATransform3DTranslate(_backImgV.layer.transform, 0, 0, -(_height / 2));
     [self.containerView addSubview:_backImgV];
     
     //左
-    _leftImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.containerView.bounds.size.width / 3 * 2, self.containerView.bounds.size.height)];
+    _leftImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _height, _height)];
     _leftImgV.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:1];
-    _leftImgV.layer.transform = CATransform3DTranslate(_leftImgV.layer.transform, -_leftImgV.bounds.size.width / 2, 0, 0);
+    _leftImgV.layer.transform = CATransform3DTranslate(_leftImgV.layer.transform, -(_height / 2), 0, 0);
     _leftImgV.layer.transform = CATransform3DRotate(_leftImgV.layer.transform, M_PI_2, 0, 1, 0);
     [self.containerView addSubview:_leftImgV];
     
     //右
-    _rightImgV = [[UIImageView alloc] initWithFrame:_leftImgV.bounds];
+    _rightImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _height, _height)];
     _rightImgV.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:1];
-    _rightImgV.layer.transform = CATransform3DTranslate(_rightImgV.layer.transform, _rightImgV.bounds.size.width, 0, 0);
+    _rightImgV.layer.transform = CATransform3DTranslate(_rightImgV.layer.transform, (_width * 2 - _height) / 2, 0, 0);
     _rightImgV.layer.transform = CATransform3DRotate(_rightImgV.layer.transform, M_PI_2, 0, 1, 0);
     [self.containerView addSubview:_rightImgV];
     
     //上
-    _topImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _frontImgV.bounds.size.width, self.containerView.bounds.size.width / 3 * 2)];
+    _topImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _width, _height)];
     _topImgV.backgroundColor = [[UIColor orangeColor] colorWithAlphaComponent:1];
-    _topImgV.layer.transform = CATransform3DTranslate(_topImgV.layer.transform, 0, -_topImgV.bounds.size.height / 2, 0);
+    _topImgV.layer.transform = CATransform3DTranslate(_topImgV.layer.transform, 0, -(_height / 2), 0);
     _topImgV.layer.transform = CATransform3DRotate(_topImgV.layer.transform, M_PI_2, 1, 0, 0);
     [self.containerView addSubview:_topImgV];
     
     //下
-    _bottomImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _backImgV.bounds.size.width, _topImgV.bounds.size.height)];
+    _bottomImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _width, _height)];
     _bottomImgV.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:1];
-    _bottomImgV.layer.transform = CATransform3DTranslate(_bottomImgV.layer.transform, 0, _bottomImgV.bounds.size.height / 4, 0);
+    _bottomImgV.layer.transform = CATransform3DTranslate(_bottomImgV.layer.transform, 0, (_height / 2), 0);
     _bottomImgV.layer.transform = CATransform3DRotate(_bottomImgV.layer.transform, M_PI_2, -1, 0, 0);
     [self.containerView addSubview:_bottomImgV];
 }
@@ -182,7 +261,7 @@
 - (UIView *)containerView {
     
     if (!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];
+        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _width, _height)];
         _containerView.center = self.view.center;
         [self.view addSubview:_containerView];
     }
@@ -193,39 +272,39 @@
 #pragma mark - 其它
 - (void)squareMethod {
     
-    
-    CGRect targetBounds = (CGRect){CGPointZero,CGSizeMake(200, 200)};
+    CGFloat width = 100;
+    CGFloat valueWidth = width;
+    CGRect targetBounds = (CGRect){CGPointZero,CGSizeMake(width, width)};
     UIView *animateCube = [[UIView alloc] initWithFrame:targetBounds];
     animateCube.center = self.view.center;
     [self.view addSubview:animateCube];
     
+    UIView *test = [[UIView alloc] initWithFrame:targetBounds]; //front
+    test.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:1];
+    test.layer.transform = CATransform3DTranslate(test.layer.transform, 0, 0, valueWidth);
     
-    UIView *test = [[UIView alloc] initWithFrame:targetBounds];// front
-    test.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.25];
-    test.layer.transform = CATransform3DTranslate(test.layer.transform, 0, 0, 100);
+    UIView *test1 = [[UIView alloc] initWithFrame:targetBounds]; //back
+    test1.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:1];
+    test1.layer.transform = CATransform3DTranslate(test1.layer.transform, 0, 0, -valueWidth);
     
-    UIView *test1 = [[UIView alloc] initWithFrame:targetBounds];// back
-    test1.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-    test1.layer.transform = CATransform3DTranslate(test1.layer.transform, 0, 0, -100);
-    
-    UIView *test2 = [[UIView alloc] initWithFrame:targetBounds];// left
-    test2.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:0.5];
-    test2.layer.transform = CATransform3DTranslate(test2.layer.transform, -100, 0, 0);
+    UIView *test2 = [[UIView alloc] initWithFrame:targetBounds]; //left
+    test2.backgroundColor = [[UIColor yellowColor] colorWithAlphaComponent:1];
+    test2.layer.transform = CATransform3DTranslate(test2.layer.transform, -valueWidth, 0, 0);
     test2.layer.transform = CATransform3DRotate(test2.layer.transform, M_PI_2, 0, 1, 0);
     
-    UIView *test3 = [[UIView alloc] initWithFrame:targetBounds];// right
-    test3.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.5];
-    test3.layer.transform = CATransform3DTranslate(test3.layer.transform, 100, 0, 0);
+    UIView *test3 = [[UIView alloc] initWithFrame:targetBounds]; //right
+    test3.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:1];
+    test3.layer.transform = CATransform3DTranslate(test3.layer.transform, valueWidth, 0, 0);
     test3.layer.transform = CATransform3DRotate(test3.layer.transform, M_PI_2, 0, 1, 0);
     
-    UIView *test4 = [[UIView alloc] initWithFrame:targetBounds];// head
-    test4.backgroundColor = [[UIColor orangeColor] colorWithAlphaComponent:0.5];
-    test4.layer.transform = CATransform3DTranslate(test4.layer.transform, 0, 100, 0);
+    UIView *test4 = [[UIView alloc] initWithFrame:targetBounds]; //head
+    test4.backgroundColor = [[UIColor orangeColor] colorWithAlphaComponent:1];
+    test4.layer.transform = CATransform3DTranslate(test4.layer.transform, 0, valueWidth, 0);
     test4.layer.transform = CATransform3DRotate(test4.layer.transform, M_PI_2, 1, 0, 0);
     
-    UIView *test5 = [[UIView alloc] initWithFrame:targetBounds];// foot
-    test5.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
-    test5.layer.transform = CATransform3DTranslate(test5.layer.transform, 0, -100, 0);
+    UIView *test5 = [[UIView alloc] initWithFrame:targetBounds]; //foot
+    test5.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:1];
+    test5.layer.transform = CATransform3DTranslate(test5.layer.transform, 0, -valueWidth, 0);
     test5.layer.transform = CATransform3DRotate(test5.layer.transform, M_PI_2, -1, 0, 0);
 
     [animateCube addSubview:test];
@@ -235,14 +314,15 @@
     [animateCube addSubview:test4];
     [animateCube addSubview:test5];
     
-    animateCube.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    animateCube.transform = CGAffineTransformMakeScale(1, 1);
     
     __block CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = 1.0/-500;
+    transform.m34 = 1.0 / -500;
     
     float angle = M_PI / 360;
     animateCube.layer.sublayerTransform = transform;
-    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0/60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+    NSTimer *timer = [NSTimer timerWithTimeInterval:1.0 / 60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        
         transform = CATransform3DRotate(transform, angle, 1, 1, 0.5);
         animateCube.layer.sublayerTransform = transform;
     }];
