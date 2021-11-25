@@ -18,9 +18,8 @@
 @property (nonatomic, assign) CGFloat height;
 @property (nonatomic, assign) CATransform3D transform;
 
-@property (nonatomic, strong) UIView *containerView;
-
 @property (nonatomic, strong) NSMutableArray *imgVArr;
+@property (nonatomic, strong) NSMutableArray *titleLabArr;
 
 @end
 
@@ -35,9 +34,6 @@
     _width = 140;
     _height = 200;
     [self initView];
-    _transform = CATransform3DIdentity;
-    _transform.m34 = 1.0 / -500;
-    self.containerView.layer.sublayerTransform = _transform;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
     [btn setTitle:@"动画" forState:UIControlStateNormal];
@@ -90,8 +86,6 @@
             timing = 0;
         }
         timing += 0.1;
-        
-        weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
@@ -153,8 +147,6 @@
             timing = 0;
         }
         timing += 0.1;
-        
-        weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
@@ -199,23 +191,36 @@
         
         imgV.layer.transform = CATransform3DTranslate(imgV.layer.transform, value * i, weakSelf.height * j, 100);
     }];
-    weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
 }
 
 - (void)initTitleLab {
     
+    _titleLabArr = [[NSMutableArray alloc] init];
     NSArray *titleArr = @[@"first", @"second", @"third", @"four", @"five", @"six"];
     NSInteger i = 0;
     for (UIImageView *imgV in _imgVArr) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];
-        label.center = imgV.center;
-        label.font = [UIFont systemFontOfSize:14];
+        label.font = [UIFont systemFontOfSize:20];
         label.textColor = [UIColor redColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = titleArr[i];
+        label.alpha = 0;
         [imgV addSubview:label];
+        [_titleLabArr addObject:label];
         i++;
     }
+}
+
+#pragma mark - progress
+- (void)progressImg:(UITapGestureRecognizer *)gesture {
+    
+    UILabel *lab = _titleLabArr[gesture.view.tag];
+    [UIView transitionWithView:gesture.view duration:2 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+        
+        lab.alpha = 1;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 #pragma mark - 初始化视图
@@ -225,24 +230,18 @@
     
     NSArray *colorArr = @[[UIColor blueColor], [UIColor blackColor], [UIColor yellowColor], [UIColor purpleColor], [UIColor orangeColor], [UIColor greenColor]];
     for (NSInteger i = 0; i < 6; i ++) {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.containerView.bounds];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _width, _height)];
+        imageView.center = self.view.center;
         imageView.tag = i;
+        imageView.userInteractionEnabled = YES;
         imageView.backgroundColor = [colorArr[i] colorWithAlphaComponent:1];
         imageView.layer.transform = CATransform3DScale(imageView.layer.transform, 0.01, 0.01, 1);
-        [self.containerView addSubview:imageView];
+        [self.view addSubview:imageView];
         [_imgVArr addObject:imageView];
+        
+        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(progressImg:)];
+        [imageView addGestureRecognizer:gesture];
     }
-}
-
-#pragma mark - 懒加载
-- (UIView *)containerView {
-    
-    if (!_containerView) {
-        _containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _width, _height)];
-        _containerView.center = self.view.center;
-        [self.view addSubview:_containerView];
-    }
-    return _containerView;
 }
 
 @end
