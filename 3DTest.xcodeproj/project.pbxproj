@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */; };
+		B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */; };
 		B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8B274DFAA60002B606 /* AppDelegate.m */; };
 		B16BCA8F274DFAA60002B606 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8E274DFAA60002B606 /* SceneDelegate.m */; };
 		B16BCA92274DFAA60002B606 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA91274DFAA60002B606 /* ViewController.m */; };
@@ -38,6 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B1079B29274F1BEC00C4B70E /* YXBoxFloatAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBoxFloatAnimationVC.h; sourceTree = "<group>"; };
+		B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBoxFloatAnimationVC.m; sourceTree = "<group>"; };
+		B1079B2D274F1C2A00C4B70E /* YXBoxOpenAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBoxOpenAnimationVC.h; sourceTree = "<group>"; };
+		B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBoxOpenAnimationVC.m; sourceTree = "<group>"; };
 		B16BCA87274DFAA60002B606 /* 3DTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B16BCA8A274DFAA60002B606 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B16BCA8B274DFAA60002B606 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -84,6 +90,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */ = {
+			isa = PBXGroup;
+			children = (
+				B1079B29274F1BEC00C4B70E /* YXBoxFloatAnimationVC.h */,
+				B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */,
+			);
+			path = YXBoxFloatAnimationVC;
+			sourceTree = "<group>";
+		};
+		B1079B2C274F1C1500C4B70E /* YXBoxOpenAnimationVC */ = {
+			isa = PBXGroup;
+			children = (
+				B1079B2D274F1C2A00C4B70E /* YXBoxOpenAnimationVC.h */,
+				B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */,
+			);
+			path = YXBoxOpenAnimationVC;
+			sourceTree = "<group>";
+		};
 		B16BCA7E274DFAA60002B606 = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +132,8 @@
 		B16BCA89274DFAA60002B606 /* 3DTest */ = {
 			isa = PBXGroup;
 			children = (
+				B1079B2C274F1C1500C4B70E /* YXBoxOpenAnimationVC */,
+				B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */,
 				B16BCA8A274DFAA60002B606 /* AppDelegate.h */,
 				B16BCA8B274DFAA60002B606 /* AppDelegate.m */,
 				B16BCA8D274DFAA60002B606 /* SceneDelegate.h */,
@@ -278,7 +304,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */,
 				B16BCA92274DFAA60002B606 /* ViewController.m in Sources */,
+				B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */,
 				B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */,
 				B16BCA9D274DFAA80002B606 /* main.m in Sources */,
 				B16BCA8F274DFAA60002B606 /* SceneDelegate.m in Sources */,
