@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00F4A7042755094F00E379FF /* YXBlindBoxLiftAnimationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 00F4A7032755094F00E379FF /* YXBlindBoxLiftAnimationManager.m */; };
 		B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */; };
 		B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */; };
 		B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8B274DFAA60002B606 /* AppDelegate.m */; };
@@ -40,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00F4A7022755094F00E379FF /* YXBlindBoxLiftAnimationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXBlindBoxLiftAnimationManager.h; sourceTree = "<group>"; };
+		00F4A7032755094F00E379FF /* YXBlindBoxLiftAnimationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXBlindBoxLiftAnimationManager.m; sourceTree = "<group>"; };
 		B1079B29274F1BEC00C4B70E /* YXBoxFloatAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBoxFloatAnimationVC.h; sourceTree = "<group>"; };
 		B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBoxFloatAnimationVC.m; sourceTree = "<group>"; };
 		B1079B2D274F1C2A00C4B70E /* YXBoxOpenAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBoxOpenAnimationVC.h; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				B16BCA8E274DFAA60002B606 /* SceneDelegate.m */,
 				B16BCA90274DFAA60002B606 /* ViewController.h */,
 				B16BCA91274DFAA60002B606 /* ViewController.m */,
+				00F4A7022755094F00E379FF /* YXBlindBoxLiftAnimationManager.h */,
+				00F4A7032755094F00E379FF /* YXBlindBoxLiftAnimationManager.m */,
 				B16BCA93274DFAA60002B606 /* Main.storyboard */,
 				B16BCA96274DFAA80002B606 /* Assets.xcassets */,
 				B16BCA98274DFAA80002B606 /* LaunchScreen.storyboard */,
@@ -306,6 +311,7 @@
 			files = (
 				B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */,
 				B16BCA92274DFAA60002B606 /* ViewController.m in Sources */,
+				00F4A7042755094F00E379FF /* YXBlindBoxLiftAnimationManager.m in Sources */,
 				B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */,
 				B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */,
 				B16BCA9D274DFAA80002B606 /* main.m in Sources */,

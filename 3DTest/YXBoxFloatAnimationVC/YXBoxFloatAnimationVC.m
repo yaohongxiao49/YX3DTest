@@ -6,6 +6,7 @@
 //
 
 #import "YXBoxFloatAnimationVC.h"
+#import "YXBlindBoxLiftAnimationManager.h"
 
 /** 弧度转角度 */
 #define kRadiasToDegrees(radias) ((radias) * (180.0 / M_PI))
@@ -33,6 +34,10 @@
 @property (nonatomic, strong) UIDynamicItemBehavior *itemBehavior; //弹性行为
 @property (nonatomic, strong) UIPushBehavior *pushBehavior; //推力行为
 @property (nonatomic, strong) UIImageView *projImgVFirst;
+
+@property (nonatomic, strong) UIView *topView;
+@property (nonatomic, strong) UIView *bottomView;
+@property (nonatomic, strong) UIImageView *imgV;
 
 @end
 
@@ -62,6 +67,8 @@
     btn.frame = CGRectMake(100, 100, 100, 30);
     [btn addTarget:self action:@selector(progressBtn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
+    
+    [[YXBlindBoxLiftAnimationManager shareManager] startAnimationandFromView:self.bottomView toView:self.topView showBgView:self.view imgView:self.imgV];
 }
 
 #pragma mark - progress
@@ -463,6 +470,34 @@
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 
+}
+
+- (UIView *)topView {
+    
+    if (!_topView) {
+        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, 414, 20)];
+        _topView.backgroundColor = [UIColor redColor];
+        [self.view addSubview:_topView];
+    }
+    return _topView;
+}
+- (UIView *)bottomView {
+    
+    if (!_bottomView) {
+        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 414, 20)];
+        _bottomView.backgroundColor = [UIColor redColor];
+        [self.view addSubview:_bottomView];
+    }
+    return _bottomView;
+}
+- (UIImageView *)imgV {
+    
+    if (!_imgV) {
+        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 18, 18)];
+        [_imgV setImage:[UIImage imageNamed:@"BoxTestImg"]];
+        [self.view insertSubview:_imgV atIndex:0];
+    }
+    return _imgV;
 }
 
 @end
