@@ -18,7 +18,8 @@
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) CGFloat height;
 @property (nonatomic, assign) CGFloat angle;
-@property (nonatomic, assign) CATransform3D transform;
+@property (nonatomic, assign) CATransform3D thirdDTransform;
+@property (nonatomic, assign) NSTimer *floatTimer;
 
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIImageView *frontImgV;
@@ -53,10 +54,10 @@
     _height = 100;
     _angle = kDegreesToRadias(20);
     [self initView];
-    _transform = CATransform3DIdentity;
-    _transform.m34 = 1.0 / -500;
-    _transform = CATransform3DRotate(_transform, _angle, -0.1, -0.1, 0);
-    self.containerView.layer.sublayerTransform = _transform;
+    _thirdDTransform = CATransform3DIdentity;
+    _thirdDTransform.m34 = 1.0 / -500;
+    _thirdDTransform = CATransform3DRotate(_thirdDTransform, _angle, -0.1, -0.1, 0);
+    self.containerView.layer.sublayerTransform = _thirdDTransform;
     
     [self initOutView:0.5];
     
@@ -77,25 +78,26 @@
     sender.selected =! sender.selected;
     
     if (sender.isSelected) {
-        [self boxMergeAndFloatAnimation];
+        [self boxAnimationByBoolMerge:YES];
     }
     else {
-        [self boxSpreadAnimation];
+        [self boxAnimationByBoolMerge:NO];
     }
 }
 
 #pragma mark - 合并动画
-- (void)boxMergeAndFloatAnimation {
+- (void)boxAnimationByBoolMerge:(BOOL)boolMerge {
     
-    CGFloat mergeAngle = kDegreesToRadias(1);
-    CGFloat speed = 5;
+    CGFloat mergeAngle = boolMerge ? kDegreesToRadias(1) : -kDegreesToRadias(1);
+    CGFloat speed = 3;
     __block CGFloat timing = 0;
     __weak typeof(self) weakSelf = self;
     
+    if (!boolMerge) [_floatTimer setFireDate:[NSDate distantFuture]];
     NSTimer *transformTimer = [NSTimer timerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
 
-        weakSelf.transform = CATransform3DRotate(weakSelf.transform, mergeAngle, 1, 1, 0.5);
-        weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
+        weakSelf.thirdDTransform = CATransform3DRotate(weakSelf.thirdDTransform, mergeAngle, 1, 1, 0.5);
+        weakSelf.containerView.layer.sublayerTransform = weakSelf.thirdDTransform;
     }];
     [[NSRunLoop currentRunLoop] addTimer:transformTimer forMode:NSRunLoopCommonModes];
     
@@ -108,12 +110,12 @@
             if (!boolEnd) {
                 [UIView animateWithDuration:speed animations:^{
                     
-                    weakSelf.frontImgV.layer.transform = CATransform3DTranslate(weakSelf.frontImgV.layer.transform, 0, 0, -zValue);
-                    weakSelf.backImgV.layer.transform = CATransform3DTranslate(weakSelf.backImgV.layer.transform, 0, 0, zValue);
-                    weakSelf.leftImgV.layer.transform = CATransform3DTranslate(weakSelf.leftImgV.layer.transform, 0, 0, zValue);
-                    weakSelf.rightImgV.layer.transform = CATransform3DTranslate(weakSelf.rightImgV.layer.transform, 0, 0, -zValue);
-                    weakSelf.topImgV.layer.transform = CATransform3DTranslate(weakSelf.topImgV.layer.transform, 0, 0, -zValue);
-                    weakSelf.bottomImgV.layer.transform = CATransform3DTranslate(weakSelf.bottomImgV.layer.transform, 0, 0, -zValue);
+                    weakSelf.frontImgV.layer.transform = CATransform3DTranslate(weakSelf.frontImgV.layer.transform, 0, 0, boolMerge ? -zValue : zValue);
+                    weakSelf.backImgV.layer.transform = CATransform3DTranslate(weakSelf.backImgV.layer.transform, 0, 0, boolMerge ? zValue : -zValue);
+                    weakSelf.leftImgV.layer.transform = CATransform3DTranslate(weakSelf.leftImgV.layer.transform, 0, 0, boolMerge ? zValue : -zValue);
+                    weakSelf.rightImgV.layer.transform = CATransform3DTranslate(weakSelf.rightImgV.layer.transform, 0, 0, boolMerge ? -zValue : zValue);
+                    weakSelf.topImgV.layer.transform = CATransform3DTranslate(weakSelf.topImgV.layer.transform, 0, 0, boolMerge ? -zValue : zValue);
+                    weakSelf.bottomImgV.layer.transform = CATransform3DTranslate(weakSelf.bottomImgV.layer.transform, 0, 0, boolMerge ? -zValue : zValue);
                 } completion:^(BOOL finished) {
                     
                     boolEnd = YES;
@@ -124,55 +126,14 @@
             timing = 0;
         }
         
-        if (floatValue >= speed * 1.4) {
+        if (floatValue >= speed * 1.14) {
             [timer setFireDate:[NSDate distantFuture]];
             [transformTimer setFireDate:[NSDate distantFuture]];
-            [weakSelf boxFloatAnimation];
+            if (boolMerge) [weakSelf boxFloatAnimation];
         }
         
         timing += 0.1;
         floatValue += 0.1;
-    }];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-}
-
-#pragma mark - 散开动画
-- (void)boxSpreadAnimation {
-    
-    CGFloat mergeAngle = -kDegreesToRadias(1);
-    CGFloat speed = 5;
-    __block CGFloat timing = 0;
-    __weak typeof(self) weakSelf = self;
-    
-    NSTimer *transformTimer = [NSTimer timerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
-
-        weakSelf.transform = CATransform3DRotate(weakSelf.transform, mergeAngle, 1, 1, 0.5);
-        weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
-    }];
-    [[NSRunLoop currentRunLoop] addTimer:transformTimer forMode:NSRunLoopCommonModes];
-    
-    CGFloat zValue = _height / 0.5;
-    NSTimer *timer = [NSTimer timerWithTimeInterval:0.1 repeats:YES block:^(NSTimer * _Nonnull timer) {
-
-        if (timing == 0.1) {
-            [UIView animateWithDuration:speed animations:^{
-                
-                weakSelf.frontImgV.layer.transform = CATransform3DTranslate(weakSelf.frontImgV.layer.transform, 0, 0, zValue);
-                weakSelf.backImgV.layer.transform = CATransform3DTranslate(weakSelf.backImgV.layer.transform, 0, 0, -zValue);
-                weakSelf.leftImgV.layer.transform = CATransform3DTranslate(weakSelf.leftImgV.layer.transform, 0, 0, -zValue);
-                weakSelf.rightImgV.layer.transform = CATransform3DTranslate(weakSelf.rightImgV.layer.transform, 0, 0, zValue);
-                weakSelf.topImgV.layer.transform = CATransform3DTranslate(weakSelf.topImgV.layer.transform, 0, 0, zValue);
-                weakSelf.bottomImgV.layer.transform = CATransform3DTranslate(weakSelf.bottomImgV.layer.transform, 0, 0, zValue);
-            } completion:^(BOOL finished) {
-                
-                [timer setFireDate:[NSDate distantFuture]];
-                [transformTimer setFireDate:[NSDate distantFuture]];
-            }];
-        }
-        else if (timing >= speed) {
-            timing = 0;
-        }
-        timing += 0.1;
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
@@ -186,7 +147,7 @@
 
     __block CGFloat rotateValue = 0.0;
     __block BOOL boolRotateValue = NO;
-    NSTimer *timer = [NSTimer timerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
+    _floatTimer = [NSTimer timerWithTimeInterval:0.01 repeats:YES block:^(NSTimer * _Nonnull timer) {
 
         //上下浮动
         [self upAndDownAnimationByRranslateValue:translateValue boolTranslateValue:boolTranslateValue finished:^(CGFloat value, BOOL boolTranslate) {
@@ -194,7 +155,7 @@
             translateValue = value;
             boolTranslateValue = boolTranslate;
 
-            self.transform = CATransform3DTranslate(self.transform, 0, boolTranslateValue ? -0.1 : 0.1, 0);
+            weakSelf.thirdDTransform = CATransform3DTranslate(weakSelf.thirdDTransform, 0, boolTranslateValue ? -0.1 : 0.1, 0);
         }];
 
         //左右浮动
@@ -202,12 +163,12 @@
 
             rotateValue = value;
             boolRotateValue = boolRotate;
-            weakSelf.transform = CATransform3DRotate(weakSelf.transform, boolRotateValue ? kDegreesToRadias(0.15) : -kDegreesToRadias(0.15), 1, 1, 0.1);
+            weakSelf.thirdDTransform = CATransform3DRotate(weakSelf.thirdDTransform, boolRotateValue ? kDegreesToRadias(0.15) : -kDegreesToRadias(0.15), 1, 1, 0.1);
         }];
 
-        weakSelf.containerView.layer.sublayerTransform = weakSelf.transform;
+        weakSelf.containerView.layer.sublayerTransform = weakSelf.thirdDTransform;
     }];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    [[NSRunLoop currentRunLoop] addTimer:_floatTimer forMode:NSRunLoopCommonModes];
 }
 
 #pragma mark - 上下浮动
@@ -470,34 +431,6 @@
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 
-}
-
-- (UIView *)topView {
-    
-    if (!_topView) {
-        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, 414, 20)];
-        _topView.backgroundColor = [UIColor redColor];
-        [self.view addSubview:_topView];
-    }
-    return _topView;
-}
-- (UIView *)bottomView {
-    
-    if (!_bottomView) {
-        _bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 500, 414, 20)];
-        _bottomView.backgroundColor = [UIColor redColor];
-        [self.view addSubview:_bottomView];
-    }
-    return _bottomView;
-}
-- (UIImageView *)imgV {
-    
-    if (!_imgV) {
-        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 18, 18)];
-        [_imgV setImage:[UIImage imageNamed:@"BoxTestImg"]];
-        [self.view insertSubview:_imgV atIndex:0];
-    }
-    return _imgV;
 }
 
 @end
