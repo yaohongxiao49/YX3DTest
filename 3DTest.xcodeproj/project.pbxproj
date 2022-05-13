@@ -12,6 +12,8 @@
 		4BC139C334B76644D12354C0 /* libPods-3DTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4673D2158A03A41AD4EB4A /* libPods-3DTest.a */; };
 		B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */; };
 		B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */; };
+		B11B5D37282E6CBB0042C433 /* YX3DBallBtnView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11B5D31282E6CBB0042C433 /* YX3DBallBtnView.m */; };
+		B11B5D38282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B11B5D35282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m */; };
 		B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8B274DFAA60002B606 /* AppDelegate.m */; };
 		B16BCA8F274DFAA60002B606 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8E274DFAA60002B606 /* SceneDelegate.m */; };
 		B16BCA92274DFAA60002B606 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA91274DFAA60002B606 /* ViewController.m */; };
@@ -52,6 +54,12 @@
 		B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBoxFloatAnimationVC.m; sourceTree = "<group>"; };
 		B1079B2D274F1C2A00C4B70E /* YXBoxOpenAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBoxOpenAnimationVC.h; sourceTree = "<group>"; };
 		B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBoxOpenAnimationVC.m; sourceTree = "<group>"; };
+		B11B5D30282E6CBB0042C433 /* YX3DBallBtnMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YX3DBallBtnMatrix.h; sourceTree = "<group>"; };
+		B11B5D31282E6CBB0042C433 /* YX3DBallBtnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YX3DBallBtnView.m; sourceTree = "<group>"; };
+		B11B5D32282E6CBB0042C433 /* YX3DBallBtnPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YX3DBallBtnPoint.h; sourceTree = "<group>"; };
+		B11B5D33282E6CBB0042C433 /* YX3DBallBtnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YX3DBallBtnView.h; sourceTree = "<group>"; };
+		B11B5D35282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YX3DBallCollectionViewLayout.m; sourceTree = "<group>"; };
+		B11B5D36282E6CBB0042C433 /* YX3DBallCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YX3DBallCollectionViewLayout.h; sourceTree = "<group>"; };
 		B16BCA87274DFAA60002B606 /* 3DTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B16BCA8A274DFAA60002B606 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B16BCA8B274DFAA60002B606 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -101,13 +109,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		009D86D5275FA1A9008B2249 /* Player */ = {
+		009D86D5275FA1A9008B2249 /* YXPlayer */ = {
 			isa = PBXGroup;
 			children = (
 				009D86D6275FA1C5008B2249 /* YXPlayerVC.h */,
 				009D86D7275FA1C5008B2249 /* YXPlayerVC.m */,
 			);
-			path = Player;
+			path = YXPlayer;
 			sourceTree = "<group>";
 		};
 		B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */ = {
@@ -126,6 +134,35 @@
 				B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */,
 			);
 			path = YXBoxOpenAnimationVC;
+			sourceTree = "<group>";
+		};
+		B11B5D2E282E6CBB0042C433 /* YX3DBallAnimationTool */ = {
+			isa = PBXGroup;
+			children = (
+				B11B5D2F282E6CBB0042C433 /* YX3DBallBtnView */,
+				B11B5D34282E6CBB0042C433 /* YX3DBallCollectionViewLayout */,
+			);
+			path = YX3DBallAnimationTool;
+			sourceTree = "<group>";
+		};
+		B11B5D2F282E6CBB0042C433 /* YX3DBallBtnView */ = {
+			isa = PBXGroup;
+			children = (
+				B11B5D30282E6CBB0042C433 /* YX3DBallBtnMatrix.h */,
+				B11B5D32282E6CBB0042C433 /* YX3DBallBtnPoint.h */,
+				B11B5D33282E6CBB0042C433 /* YX3DBallBtnView.h */,
+				B11B5D31282E6CBB0042C433 /* YX3DBallBtnView.m */,
+			);
+			path = YX3DBallBtnView;
+			sourceTree = "<group>";
+		};
+		B11B5D34282E6CBB0042C433 /* YX3DBallCollectionViewLayout */ = {
+			isa = PBXGroup;
+			children = (
+				B11B5D36282E6CBB0042C433 /* YX3DBallCollectionViewLayout.h */,
+				B11B5D35282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m */,
+			);
+			path = YX3DBallCollectionViewLayout;
 			sourceTree = "<group>";
 		};
 		B16BCA7E274DFAA60002B606 = {
@@ -153,7 +190,8 @@
 		B16BCA89274DFAA60002B606 /* 3DTest */ = {
 			isa = PBXGroup;
 			children = (
-				009D86D5275FA1A9008B2249 /* Player */,
+				B11B5D2E282E6CBB0042C433 /* YX3DBallAnimationTool */,
+				009D86D5275FA1A9008B2249 /* YXPlayer */,
 				B1079B2C274F1C1500C4B70E /* YXBoxOpenAnimationVC */,
 				B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */,
 				B16BCA8A274DFAA60002B606 /* AppDelegate.h */,
@@ -385,7 +423,9 @@
 				B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */,
 				B16BCA92274DFAA60002B606 /* ViewController.m in Sources */,
 				00F4A7042755094F00E379FF /* YXBlindBoxLiftAnimationManager.m in Sources */,
+				B11B5D37282E6CBB0042C433 /* YX3DBallBtnView.m in Sources */,
 				B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */,
+				B11B5D38282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m in Sources */,
 				B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */,
 				B16BCA9D274DFAA80002B606 /* main.m in Sources */,
 				009D86D8275FA1C5008B2249 /* YXPlayerVC.m in Sources */,
