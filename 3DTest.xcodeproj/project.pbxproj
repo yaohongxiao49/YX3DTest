@@ -25,6 +25,8 @@
 		B16BCAB1274DFAA90002B606 /* _DTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCAB0274DFAA90002B606 /* _DTestUITests.m */; };
 		B16BCAB3274DFAA90002B606 /* _DTestUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCAB2274DFAA90002B606 /* _DTestUITestsLaunchTests.m */; };
 		B16BCAC1274E012C0002B606 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B16BCAC0274E012B0002B606 /* QuartzCore.framework */; };
+		B1C70E3A2831EFBE006D73C1 /* YXBallAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C70E392831EFBE006D73C1 /* YXBallAnimationVC.m */; };
+		B1C70E3D2832210B006D73C1 /* YX3DCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C70E3C2832210B006D73C1 /* YX3DCollectionViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +80,10 @@
 		B16BCAB0274DFAA90002B606 /* _DTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _DTestUITests.m; sourceTree = "<group>"; };
 		B16BCAB2274DFAA90002B606 /* _DTestUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _DTestUITestsLaunchTests.m; sourceTree = "<group>"; };
 		B16BCAC0274E012B0002B606 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B1C70E382831EFBE006D73C1 /* YXBallAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBallAnimationVC.h; sourceTree = "<group>"; };
+		B1C70E392831EFBE006D73C1 /* YXBallAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBallAnimationVC.m; sourceTree = "<group>"; };
+		B1C70E3B2832210B006D73C1 /* YX3DCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YX3DCollectionViewCell.h; sourceTree = "<group>"; };
+		B1C70E3C2832210B006D73C1 /* YX3DCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YX3DCollectionViewCell.m; sourceTree = "<group>"; };
 		B206257AA13A2105541C6721 /* Pods-3DTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-3DTest.release.xcconfig"; path = "Target Support Files/Pods-3DTest/Pods-3DTest.release.xcconfig"; sourceTree = "<group>"; };
 		DB4673D2158A03A41AD4EB4A /* libPods-3DTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-3DTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -121,6 +127,8 @@
 		B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */ = {
 			isa = PBXGroup;
 			children = (
+				00F4A7022755094F00E379FF /* YXBlindBoxLiftAnimationManager.h */,
+				00F4A7032755094F00E379FF /* YXBlindBoxLiftAnimationManager.m */,
 				B1079B29274F1BEC00C4B70E /* YXBoxFloatAnimationVC.h */,
 				B1079B2A274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m */,
 			);
@@ -194,14 +202,13 @@
 				009D86D5275FA1A9008B2249 /* YXPlayer */,
 				B1079B2C274F1C1500C4B70E /* YXBoxOpenAnimationVC */,
 				B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */,
+				B1C70E372831EF9C006D73C1 /* YXBallAnimationVC */,
 				B16BCA8A274DFAA60002B606 /* AppDelegate.h */,
 				B16BCA8B274DFAA60002B606 /* AppDelegate.m */,
 				B16BCA8D274DFAA60002B606 /* SceneDelegate.h */,
 				B16BCA8E274DFAA60002B606 /* SceneDelegate.m */,
 				B16BCA90274DFAA60002B606 /* ViewController.h */,
 				B16BCA91274DFAA60002B606 /* ViewController.m */,
-				00F4A7022755094F00E379FF /* YXBlindBoxLiftAnimationManager.h */,
-				00F4A7032755094F00E379FF /* YXBlindBoxLiftAnimationManager.m */,
 				B16BCA93274DFAA60002B606 /* Main.storyboard */,
 				B16BCA96274DFAA80002B606 /* Assets.xcassets */,
 				B16BCA98274DFAA80002B606 /* LaunchScreen.storyboard */,
@@ -235,6 +242,17 @@
 				DB4673D2158A03A41AD4EB4A /* libPods-3DTest.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B1C70E372831EF9C006D73C1 /* YXBallAnimationVC */ = {
+			isa = PBXGroup;
+			children = (
+				B1C70E382831EFBE006D73C1 /* YXBallAnimationVC.h */,
+				B1C70E392831EFBE006D73C1 /* YXBallAnimationVC.m */,
+				B1C70E3B2832210B006D73C1 /* YX3DCollectionViewCell.h */,
+				B1C70E3C2832210B006D73C1 /* YX3DCollectionViewCell.m */,
+			);
+			path = YXBallAnimationVC;
 			sourceTree = "<group>";
 		};
 		CA02D5AFBE23F8C7AB2A3515 /* Pods */ = {
@@ -423,8 +441,10 @@
 				B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */,
 				B16BCA92274DFAA60002B606 /* ViewController.m in Sources */,
 				00F4A7042755094F00E379FF /* YXBlindBoxLiftAnimationManager.m in Sources */,
+				B1C70E3A2831EFBE006D73C1 /* YXBallAnimationVC.m in Sources */,
 				B11B5D37282E6CBB0042C433 /* YX3DBallBtnView.m in Sources */,
 				B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */,
+				B1C70E3D2832210B006D73C1 /* YX3DCollectionViewCell.m in Sources */,
 				B11B5D38282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m in Sources */,
 				B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */,
 				B16BCA9D274DFAA80002B606 /* main.m in Sources */,
