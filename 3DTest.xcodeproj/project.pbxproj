@@ -25,6 +25,7 @@
 		B16BCAB1274DFAA90002B606 /* _DTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCAB0274DFAA90002B606 /* _DTestUITests.m */; };
 		B16BCAB3274DFAA90002B606 /* _DTestUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCAB2274DFAA90002B606 /* _DTestUITestsLaunchTests.m */; };
 		B16BCAC1274E012C0002B606 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B16BCAC0274E012B0002B606 /* QuartzCore.framework */; };
+		B1B5E60B2833B08400051B2C /* 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = B1B5E60A2833B08400051B2C /* 1024.png */; };
 		B1C70E3A2831EFBE006D73C1 /* YXBallAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C70E392831EFBE006D73C1 /* YXBallAnimationVC.m */; };
 		B1C70E3D2832210B006D73C1 /* YX3DCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1C70E3C2832210B006D73C1 /* YX3DCollectionViewCell.m */; };
 /* End PBXBuildFile section */
@@ -80,6 +81,7 @@
 		B16BCAB0274DFAA90002B606 /* _DTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _DTestUITests.m; sourceTree = "<group>"; };
 		B16BCAB2274DFAA90002B606 /* _DTestUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _DTestUITestsLaunchTests.m; sourceTree = "<group>"; };
 		B16BCAC0274E012B0002B606 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B1B5E60A2833B08400051B2C /* 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1024.png; sourceTree = "<group>"; };
 		B1C70E382831EFBE006D73C1 /* YXBallAnimationVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXBallAnimationVC.h; sourceTree = "<group>"; };
 		B1C70E392831EFBE006D73C1 /* YXBallAnimationVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXBallAnimationVC.m; sourceTree = "<group>"; };
 		B1C70E3B2832210B006D73C1 /* YX3DCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YX3DCollectionViewCell.h; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				B16BCA98274DFAA80002B606 /* LaunchScreen.storyboard */,
 				B16BCA9B274DFAA80002B606 /* Info.plist */,
 				B16BCA9C274DFAA80002B606 /* main.m */,
+				B1B5E60A2833B08400051B2C /* 1024.png */,
 			);
 			path = 3DTest;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 			files = (
 				B16BCA9A274DFAA80002B606 /* LaunchScreen.storyboard in Resources */,
 				B16BCA97274DFAA80002B606 /* Assets.xcassets in Resources */,
+				B1B5E60B2833B08400051B2C /* 1024.png in Resources */,
 				B16BCA95274DFAA60002B606 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

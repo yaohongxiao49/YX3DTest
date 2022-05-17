@@ -9,6 +9,7 @@
 #import "YX3DBallCollectionViewLayout.h"
 #import "YX3DBallBtnView.h"
 #import "YX3DCollectionViewCell.h"
+#import <SceneKit/SceneKit.h>
 
 @interface YXBallAnimationVC () <UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, YX3DBallCollectionViewLayoutDataSource>
 
@@ -41,10 +42,10 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self ballCollectionAnimation];
+    [self initNormalCollectionView];
+//    [self ballCollectionAnimation];
 //    [self ballBtnAnimation];
 }
-
 #pragma mark - 移除Timer
 - (void)stopTimer {
     
@@ -115,7 +116,7 @@
 #pragma mark - <YX3DBallCollectionViewLayoutDataSource>
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(YX3DBallCollectionViewLayout *)collectionViewLayout sizeForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    return CGSizeMake(80, 50);
+    return CGSizeMake(70, 50);
 }
 - (YX3DBallCollectionViewLayoutType)collectionView:(UICollectionView *)collectionView layout:(YX3DBallCollectionViewLayout *)collectionViewLayout typeForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -156,7 +157,7 @@
 #pragma mark - ballCollection
 - (void)ballCollectionAnimation {
     
-    _collectionDataSourceArr = [[NSMutableArray alloc] initWithArray:@[@"1", @"2", @"3", @"4", @"5", @"6"]];
+    _collectionDataSourceArr = [[NSMutableArray alloc] initWithArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"1", @"2", @"3", @"4", @"5", @"6"]];
     
     YX3DBallCollectionViewLayout *layout = [[YX3DBallCollectionViewLayout alloc] init];
     layout.delegate = self;
@@ -165,23 +166,58 @@
     layout.zValue = 0;
     layout.radius = 2.1;
     layout.amplitude = 1.0 / -1000.0;
-    
-    _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 40, 300) collectionViewLayout:layout];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
     _collectionView.showsHorizontalScrollIndicator = NO;
     _collectionView.showsVerticalScrollIndicator = NO;
     [_collectionView registerClass:[YX3DCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([YX3DCollectionViewCell class])];
     [self.view addSubview:_collectionView];
-    
+    _collectionView.center = self.view.center;
+
     _collectionView.contentOffset = CGPointMake(CGRectGetWidth(_collectionView.frame), CGRectGetHeight(_collectionView.frame));
-    
+
     CATransform3D transform3D = CATransform3DIdentity;
     transform3D.m34 = 1.0 / -500.0;
-    transform3D = CATransform3DRotate(transform3D, (10) / 180.0 * M_PI, 0.1, 0, 0);
+    transform3D = CATransform3DRotate(transform3D, (10) / 180.0 * M_PI, -0.1, 0, 0);
     self.collectionView.layer.sublayerTransform = transform3D;
-    
+
     [self openTimer];
+}
+
+#pragma mark - 初始化正常collectionView
+- (void)initNormalCollectionView {
+    
+    SCNView *scnView = [[SCNView alloc] initWithFrame:self.view.bounds];
+    // 创建一个场景,系统默认是没有的
+    scnView.scene = [SCNScene scene];
+    // 先设置一个颜色看看游戏引擎有没有加载
+    scnView.backgroundColor = [UIColor redColor];
+    // 添加到scnView中去
+    [self.view addSubview:scnView];
+    
+    _collectionDataSourceArr = [[NSMutableArray alloc] initWithArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"1", @"2", @"3", @"4", @"5", @"6"]];
+    
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumLineSpacing = 10;
+    layout.minimumInteritemSpacing = 10;
+    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 200, 100) collectionViewLayout:layout];
+    _collectionView.center = scnView.center;
+    _collectionView.dataSource = self;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    _collectionView.showsVerticalScrollIndicator = NO;
+    [_collectionView registerClass:[YX3DCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([YX3DCollectionViewCell class])];
+    [scnView addSubview:_collectionView];
+
+    SCNBox *box = [SCNBox boxWithWidth:0.5 height:0.5 length:0.5 chamferRadius:0.5];
+    box.firstMaterial.diffuse.contents = _collectionView.layer;//[UIImage imageNamed:@"1024.png"];
+    
+    SCNNode *boxNode = [SCNNode nodeWithGeometry:box];
+    [scnView.scene.rootNode addChildNode:boxNode];
 }
 
 #pragma mark - ballBtnAnimation

@@ -59,8 +59,6 @@
     //x,y的默认方向相反
     CGFloat angleSecond = (indexPath.row - angleOffsetX - 1) / itemCounts * M_PI * 2;
     
-//    transform3D = CATransform3DRotate(transform3D, angleSecond, 0, 1, -0.1);
-    
     YX3DBallCollectionViewLayoutType type = [self.delegate collectionView:self.collectionView layout:self typeForRowAtIndexPath:indexPath];
     
     if (self.xValue == 0 && self.yValue == 0 && self.zValue == 0) { //默认形式
@@ -121,6 +119,7 @@
 
     transform3D = CATransform3DTranslate(transform3D, 0, 0, radius);
     attributes.transform3D = transform3D;
+    
     return attributes;
 }
 
