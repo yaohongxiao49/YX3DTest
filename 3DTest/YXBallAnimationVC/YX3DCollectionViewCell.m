@@ -9,7 +9,7 @@
 
 @interface YX3DCollectionViewCell ()
 
-@property (nonatomic, strong) UILabel *titleLab;
+@property (nonatomic, strong) UIImageView *imgV;
 
 @end
 
@@ -26,23 +26,26 @@
 
 - (void)reloadValueByArr:(NSMutableArray *)arr indexPath:(NSIndexPath *)indexPath {
     
-    self.titleLab.text = arr[indexPath.row];
+    self.imgV.hidden = NO;
 }
 
 - (void)initView {
     
-    self.contentView.backgroundColor = [UIColor colorWithRed:arc4random() % 255 / 255.0 green:arc4random() % 255 / 255.0 blue:arc4random() % 255 / 255.0 alpha:1];
+    self.backgroundColor = [UIColor clearColor];
+//    self.contentView.backgroundColor = [UIColor colorWithRed:arc4random() % 255 / 255.0 green:arc4random() % 255 / 255.0 blue:arc4random() % 255 / 255.0 alpha:1];
 }
 
 #pragma mark - 懒加载
-- (UILabel *)titleLab {
+- (UIImageView *)imgV {
     
-    if (!_titleLab) {
-        _titleLab = [[UILabel alloc] initWithFrame:self.contentView.bounds];
-        _titleLab.textAlignment = NSTextAlignmentCenter;
-        [self.contentView addSubview:_titleLab];
+    if (!_imgV) {
+        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, self.contentView.bounds.size.width - 10, self.contentView.bounds.size.height - 10)];
+        _imgV.contentMode = UIViewContentModeScaleAspectFill;
+        _imgV.clipsToBounds = YES;
+        [_imgV setImage:[UIImage imageNamed:@"111.jpeg"]];
+        [self.contentView addSubview:_imgV];
     }
-    return _titleLab;
+    return _imgV;
 }
 
 @end

@@ -14,6 +14,11 @@
 		B1079B2F274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B1079B2E274F1C2A00C4B70E /* YXBoxOpenAnimationVC.m */; };
 		B11B5D37282E6CBB0042C433 /* YX3DBallBtnView.m in Sources */ = {isa = PBXBuildFile; fileRef = B11B5D31282E6CBB0042C433 /* YX3DBallBtnView.m */; };
 		B11B5D38282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B11B5D35282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m */; };
+		B140E8202835D0CF00BEBD6F /* YXPickerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B140E81F2835D0CF00BEBD6F /* YXPickerVC.m */; };
+		B140E822283649C300BEBD6F /* YXTopImg.png in Resources */ = {isa = PBXBuildFile; fileRef = B140E821283649C300BEBD6F /* YXTopImg.png */; };
+		B140E82628364F2600BEBD6F /* YXBottomImg.png in Resources */ = {isa = PBXBuildFile; fileRef = B140E82528364F2600BEBD6F /* YXBottomImg.png */; };
+		B140E828283652A000BEBD6F /* 111.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = B140E827283652A000BEBD6F /* 111.jpeg */; };
+		B140E82A2836588400BEBD6F /* 1023.png in Resources */ = {isa = PBXBuildFile; fileRef = B140E8292836588400BEBD6F /* 1023.png */; };
 		B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8B274DFAA60002B606 /* AppDelegate.m */; };
 		B16BCA8F274DFAA60002B606 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA8E274DFAA60002B606 /* SceneDelegate.m */; };
 		B16BCA92274DFAA60002B606 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B16BCA91274DFAA60002B606 /* ViewController.m */; };
@@ -63,6 +68,12 @@
 		B11B5D33282E6CBB0042C433 /* YX3DBallBtnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YX3DBallBtnView.h; sourceTree = "<group>"; };
 		B11B5D35282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YX3DBallCollectionViewLayout.m; sourceTree = "<group>"; };
 		B11B5D36282E6CBB0042C433 /* YX3DBallCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YX3DBallCollectionViewLayout.h; sourceTree = "<group>"; };
+		B140E81E2835D0CF00BEBD6F /* YXPickerVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXPickerVC.h; sourceTree = "<group>"; };
+		B140E81F2835D0CF00BEBD6F /* YXPickerVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXPickerVC.m; sourceTree = "<group>"; };
+		B140E821283649C300BEBD6F /* YXTopImg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YXTopImg.png; sourceTree = "<group>"; };
+		B140E82528364F2600BEBD6F /* YXBottomImg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YXBottomImg.png; sourceTree = "<group>"; };
+		B140E827283652A000BEBD6F /* 111.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 111.jpeg; sourceTree = "<group>"; };
+		B140E8292836588400BEBD6F /* 1023.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1023.png; sourceTree = "<group>"; };
 		B16BCA87274DFAA60002B606 /* 3DTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B16BCA8A274DFAA60002B606 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B16BCA8B274DFAA60002B606 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -175,6 +186,15 @@
 			path = YX3DBallCollectionViewLayout;
 			sourceTree = "<group>";
 		};
+		B140E81D2835D0BA00BEBD6F /* YXPickerVC */ = {
+			isa = PBXGroup;
+			children = (
+				B140E81E2835D0CF00BEBD6F /* YXPickerVC.h */,
+				B140E81F2835D0CF00BEBD6F /* YXPickerVC.m */,
+			);
+			path = YXPickerVC;
+			sourceTree = "<group>";
+		};
 		B16BCA7E274DFAA60002B606 = {
 			isa = PBXGroup;
 			children = (
@@ -205,6 +225,7 @@
 				B1079B2C274F1C1500C4B70E /* YXBoxOpenAnimationVC */,
 				B1079B28274F1BCF00C4B70E /* YXBoxFloatAnimationVC */,
 				B1C70E372831EF9C006D73C1 /* YXBallAnimationVC */,
+				B140E81D2835D0BA00BEBD6F /* YXPickerVC */,
 				B16BCA8A274DFAA60002B606 /* AppDelegate.h */,
 				B16BCA8B274DFAA60002B606 /* AppDelegate.m */,
 				B16BCA8D274DFAA60002B606 /* SceneDelegate.h */,
@@ -217,6 +238,10 @@
 				B16BCA9B274DFAA80002B606 /* Info.plist */,
 				B16BCA9C274DFAA80002B606 /* main.m */,
 				B1B5E60A2833B08400051B2C /* 1024.png */,
+				B140E8292836588400BEBD6F /* 1023.png */,
+				B140E827283652A000BEBD6F /* 111.jpeg */,
+				B140E821283649C300BEBD6F /* YXTopImg.png */,
+				B140E82528364F2600BEBD6F /* YXBottomImg.png */,
 			);
 			path = 3DTest;
 			sourceTree = "<group>";
@@ -372,8 +397,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B140E822283649C300BEBD6F /* YXTopImg.png in Resources */,
+				B140E82A2836588400BEBD6F /* 1023.png in Resources */,
 				B16BCA9A274DFAA80002B606 /* LaunchScreen.storyboard in Resources */,
 				B16BCA97274DFAA80002B606 /* Assets.xcassets in Resources */,
+				B140E828283652A000BEBD6F /* 111.jpeg in Resources */,
+				B140E82628364F2600BEBD6F /* YXBottomImg.png in Resources */,
 				B1B5E60B2833B08400051B2C /* 1024.png in Resources */,
 				B16BCA95274DFAA60002B606 /* Main.storyboard in Resources */,
 			);
@@ -450,6 +479,7 @@
 				B1079B2B274F1BEC00C4B70E /* YXBoxFloatAnimationVC.m in Sources */,
 				B1C70E3D2832210B006D73C1 /* YX3DCollectionViewCell.m in Sources */,
 				B11B5D38282E6CBB0042C433 /* YX3DBallCollectionViewLayout.m in Sources */,
+				B140E8202835D0CF00BEBD6F /* YXPickerVC.m in Sources */,
 				B16BCA8C274DFAA60002B606 /* AppDelegate.m in Sources */,
 				B16BCA9D274DFAA80002B606 /* main.m in Sources */,
 				009D86D8275FA1C5008B2249 /* YXPlayerVC.m in Sources */,

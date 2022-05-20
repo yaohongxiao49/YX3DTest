@@ -10,6 +10,7 @@
 #import "YXBoxOpenAnimationVC.h"
 #import "YXPlayerVC.h"
 #import "YXBallAnimationVC.h"
+#import "YXPickerVC.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -26,7 +27,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _dataSourceArr = [[NSMutableArray alloc] initWithObjects:@"盒子合并及悬浮动画", @"卡片弹出动画", @"视频播放", @"文字球", nil];
+    _dataSourceArr = [[NSMutableArray alloc] initWithObjects:@"盒子合并及悬浮动画", @"卡片弹出动画", @"视频播放", @"文字球", @"选择器", nil];
     
     self.navigationController.title = @"主页";
     
@@ -67,6 +68,10 @@
     }
     else if (indexPath.row == 3) {
         YXBallAnimationVC *vc = [[YXBallAnimationVC alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (indexPath.row == 4) {
+        YXPickerVC *vc = [[YXPickerVC alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

@@ -42,9 +42,10 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [self initNormalCollectionView];
+//    [self initNormalCollectionView];
+//    [self initSCNView];
 //    [self ballCollectionAnimation];
-//    [self ballBtnAnimation];
+    [self ballBtnAnimation];
 }
 #pragma mark - 移除Timer
 - (void)stopTimer {
@@ -68,7 +69,7 @@
 #pragma mark - timer
 - (void)processAnimation:(NSTimer *)timer {
     
-    _currentOffsetX += 1;
+    _currentOffsetX -= 1;
     [self.collectionView setContentOffset:CGPointMake(_currentOffsetX, 0) animated:NO];
 }
 
@@ -116,7 +117,7 @@
 #pragma mark - <YX3DBallCollectionViewLayoutDataSource>
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(YX3DBallCollectionViewLayout *)collectionViewLayout sizeForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    return CGSizeMake(70, 50);
+    return CGSizeMake(80, 50);
 }
 - (YX3DBallCollectionViewLayoutType)collectionView:(UICollectionView *)collectionView layout:(YX3DBallCollectionViewLayout *)collectionViewLayout typeForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -154,48 +155,8 @@
     [self openTimer];
 }
 
-#pragma mark - ballCollection
-- (void)ballCollectionAnimation {
-    
-    _collectionDataSourceArr = [[NSMutableArray alloc] initWithArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"1", @"2", @"3", @"4", @"5", @"6"]];
-    
-    YX3DBallCollectionViewLayout *layout = [[YX3DBallCollectionViewLayout alloc] init];
-    layout.delegate = self;
-    layout.xValue = 0.0;
-    layout.yValue = 1;
-    layout.zValue = 0;
-    layout.radius = 2.1;
-    layout.amplitude = 1.0 / -1000.0;
-
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 40, 300) collectionViewLayout:layout];
-    _collectionView.delegate = self;
-    _collectionView.dataSource = self;
-    _collectionView.showsHorizontalScrollIndicator = NO;
-    _collectionView.showsVerticalScrollIndicator = NO;
-    [_collectionView registerClass:[YX3DCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([YX3DCollectionViewCell class])];
-    [self.view addSubview:_collectionView];
-    _collectionView.center = self.view.center;
-
-    _collectionView.contentOffset = CGPointMake(CGRectGetWidth(_collectionView.frame), CGRectGetHeight(_collectionView.frame));
-
-    CATransform3D transform3D = CATransform3DIdentity;
-    transform3D.m34 = 1.0 / -500.0;
-    transform3D = CATransform3DRotate(transform3D, (10) / 180.0 * M_PI, -0.1, 0, 0);
-    self.collectionView.layer.sublayerTransform = transform3D;
-
-    [self openTimer];
-}
-
 #pragma mark - 初始化正常collectionView
 - (void)initNormalCollectionView {
-    
-    SCNView *scnView = [[SCNView alloc] initWithFrame:self.view.bounds];
-    // 创建一个场景,系统默认是没有的
-    scnView.scene = [SCNScene scene];
-    // 先设置一个颜色看看游戏引擎有没有加载
-    scnView.backgroundColor = [UIColor redColor];
-    // 添加到scnView中去
-    [self.view addSubview:scnView];
     
     _collectionDataSourceArr = [[NSMutableArray alloc] initWithArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"1", @"2", @"3", @"4", @"5", @"6"]];
     
@@ -205,19 +166,92 @@
     layout.minimumInteritemSpacing = 10;
     layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 200, 100) collectionViewLayout:layout];
-    _collectionView.center = scnView.center;
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(100, 100, 200, 100) collectionViewLayout:layout];
     _collectionView.dataSource = self;
     _collectionView.showsHorizontalScrollIndicator = NO;
     _collectionView.showsVerticalScrollIndicator = NO;
     [_collectionView registerClass:[YX3DCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([YX3DCollectionViewCell class])];
-    [scnView addSubview:_collectionView];
-
-    SCNBox *box = [SCNBox boxWithWidth:0.5 height:0.5 length:0.5 chamferRadius:0.5];
-    box.firstMaterial.diffuse.contents = _collectionView.layer;//[UIImage imageNamed:@"1024.png"];
+    [self.view addSubview:_collectionView];
     
-    SCNNode *boxNode = [SCNNode nodeWithGeometry:box];
-    [scnView.scene.rootNode addChildNode:boxNode];
+//    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"rotation"];
+//    animation.duration = 10.0;
+//    animation.toValue = [NSValue valueWithSCNVector4:SCNVector4Make(0, 1, 0, M_PI * 2)];
+//    animation.repeatCount = FLT_MAX;
+//    [_collectionView.layer addAnimation:animation forKey:@"earth rotation around sun"];
+}
+
+#pragma mark - SCNView
+- (void)initSCNView {
+    
+    SCNView *scnView = [[SCNView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+    scnView.center = self.view.center;
+    //创建一个场景,系统默认是没有的
+    scnView.scene = [SCNScene scene];
+    //先设置一个颜色看看游戏引擎有没有加载
+    scnView.backgroundColor = [UIColor redColor];
+    //手势交互
+    scnView.allowsCameraControl = YES;
+    //抗锯齿
+    scnView.antialiasingMode = SCNAntialiasingModeMultisampling4X;
+    //添加到scnView中去
+    [self.view addSubview:scnView];
+
+    SCNCylinder *box = [SCNCylinder cylinderWithRadius:20 height:20];
+    box.firstMaterial.diffuse.contents = [UIImage imageNamed:@"1023.png"];
+    
+    //设置虚拟摄像头
+    SCNNode *node = [SCNNode nodeWithGeometry:box];
+//    node.position = SCNVector3Make(0, 0, -0.5);
+    [scnView.scene.rootNode addChildNode:node];
+    
+    //旋转节点
+    SCNAction *customAction = [SCNAction rotateByX:0 y:-1 z:0 duration:1];
+    customAction.duration = 10;
+    SCNAction *repeatAction = [SCNAction repeatActionForever:customAction];
+    [node runAction:repeatAction];
+}
+
+#pragma mark - ballCollection
+- (void)ballCollectionAnimation {
+    
+    _collectionDataSourceArr = [[NSMutableArray alloc] initWithArray:@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"]];
+    
+    YX3DBallCollectionViewLayout *layout = [[YX3DBallCollectionViewLayout alloc] init];
+    layout.delegate = self;
+    layout.xValue = 0.0;
+    layout.yValue = 1;
+    layout.zValue = 0;
+    layout.radius = 2;
+    layout.amplitude = 1.0 / -1000.0;
+
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 40, 300) collectionViewLayout:layout];
+    _collectionView.delegate = self;
+    _collectionView.dataSource = self;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    _collectionView.showsVerticalScrollIndicator = NO;
+    _collectionView.backgroundColor = [UIColor whiteColor];
+    [_collectionView registerClass:[YX3DCollectionViewCell class] forCellWithReuseIdentifier:NSStringFromClass([YX3DCollectionViewCell class])];
+    [self.view addSubview:_collectionView];
+    _collectionView.center = self.view.center;
+
+    _collectionView.contentOffset = CGPointMake(CGRectGetWidth(_collectionView.frame), CGRectGetHeight(_collectionView.frame));
+
+    CATransform3D transform3D = CATransform3DIdentity;
+    transform3D.m34 = 1.0 / -500.0;
+    transform3D = CATransform3DRotate(transform3D, (8) / 180.0 * M_PI, -0.1, 0, 0);
+    self.collectionView.layer.sublayerTransform = transform3D;
+
+    UIImageView *bottomImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 40, 100)];
+    bottomImgV.center = CGPointMake(_collectionView.center.x, _collectionView.center.y + 60);
+    [bottomImgV setImage:[UIImage imageNamed:@"YXBottomImg"]];
+    [self.view addSubview:bottomImgV];
+    
+    UIImageView *topImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width - 100, 100)];
+    [topImgV setImage:[UIImage imageNamed:@"YXTopImg"]];
+    topImgV.center = CGPointMake(_collectionView.center.x, _collectionView.center.y - 40);
+    [self.view addSubview:topImgV];
+
+    [self openTimer];
 }
 
 #pragma mark - ballBtnAnimation
