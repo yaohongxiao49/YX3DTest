@@ -43,7 +43,7 @@
     attributes.size = size;
     
     CATransform3D transform3D = CATransform3DIdentity;
-    transform3D.m34 = self.amplitude == 0 ? 1.0 / -500.0 : self.amplitude;
+    if (self.boolAmplitude) transform3D.m34 = self.amplitude == 0 ? 1.0 / -500.0 : self.amplitude;
 
     CGFloat value = self.radius == 0.0 ? 2.0 : self.radius;
     CGFloat radius = (size.width / 2) / tanf(M_PI * 2 / itemCounts / value);

@@ -49,6 +49,8 @@ typedef NS_ENUM(NSUInteger, YX3DBallCollectionViewLayoutType) {
 @property (nonatomic, assign) CGFloat radius;
 /** 3D幅度 */
 @property (nonatomic, assign) CGFloat amplitude;
+/** 是否显示3D幅度 */
+@property (nonatomic, assign) BOOL boolAmplitude;
 
 @end
 
