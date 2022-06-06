@@ -10,6 +10,10 @@
 #import "YX3DBallBtnView.h"
 #import "YX3DCollectionViewCell.h"
 #import <SceneKit/SceneKit.h>
+#import "YXBallAnimationJoiningImgManager.h"
+
+/** 角度转弧度 */
+#define kDegreesToRadias(angle) ((angle) / 180.0 * M_PI)
 
 @interface YXBallAnimationVC () <UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, YX3DBallCollectionViewLayoutDataSource>
 
@@ -43,9 +47,11 @@
     self.view.backgroundColor = [UIColor whiteColor];
     
 //    [self initNormalCollectionView];
-//    [self initSCNView];
+    [self initSCNView];
 //    [self ballCollectionAnimation];
-    [self ballBtnAnimation];
+//    [self ballBtnAnimation];
+//    [self joiningImg];
+    
 }
 #pragma mark - 移除Timer
 - (void)stopTimer {
@@ -155,6 +161,83 @@
     [self openTimer];
 }
 
+// 判断图片是否翻转
+- (UIImage *)fixOrientation:(UIImage *)aImage {
+    
+    // No-op if the orientation is already correct
+    if (aImage.imageOrientation == UIImageOrientationUp)
+        return aImage;
+    
+    // We need to calculate the proper transformation to make the image upright.
+    // We do it in 2 steps: Rotate if Left/Right/Down, and then flip if Mirrored.
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationDown:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformRotate(transform, M_PI_2);
+            break;
+            
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, 0, aImage.size.height);
+            transform = CGAffineTransformRotate(transform, -M_PI_2);
+            break;
+        default:
+            break;
+    }
+    
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationUpMirrored:
+        case UIImageOrientationDownMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.width, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRightMirrored:
+            transform = CGAffineTransformTranslate(transform, aImage.size.height, 0);
+            transform = CGAffineTransformScale(transform, -1, 1);
+            break;
+        default:
+            break;
+    }
+    
+    // Now we draw the underlying CGImage into a new context, applying the transform
+    // calculated above.
+    CGContextRef ctx = CGBitmapContextCreate(NULL, aImage.size.width, aImage.size.height,
+                                             CGImageGetBitsPerComponent(aImage.CGImage), 0,
+                                             CGImageGetColorSpace(aImage.CGImage),
+                                             CGImageGetBitmapInfo(aImage.CGImage));
+    CGContextConcatCTM(ctx, transform);
+    switch (aImage.imageOrientation) {
+        case UIImageOrientationLeft:
+        case UIImageOrientationLeftMirrored:
+        case UIImageOrientationRight:
+        case UIImageOrientationRightMirrored:
+            // Grr...
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.height,aImage.size.width), aImage.CGImage);
+            break;
+            
+        default:
+            CGContextDrawImage(ctx, CGRectMake(0,0,aImage.size.width,aImage.size.height), aImage.CGImage);
+            break;
+    }
+    
+    // And now we just create a new UIImage from the drawing context
+    CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+    UIImage *img = [UIImage imageWithCGImage:cgimg];
+    CGContextRelease(ctx);
+    CGImageRelease(cgimg);
+    return img;
+}
 #pragma mark - 初始化正常collectionView
 - (void)initNormalCollectionView {
     
@@ -191,24 +274,64 @@
     scnView.backgroundColor = [UIColor redColor];
     //手势交互
     scnView.allowsCameraControl = YES;
+    scnView.defaultCameraController.interactionMode = SCNInteractionModeOrbitTurntable;
+    scnView.defaultCameraController.inertiaEnabled = YES;
+    scnView.defaultCameraController.maximumVerticalAngle = -50;
+    scnView.defaultCameraController.minimumVerticalAngle = 49.5;
+    //阴影光照
+    scnView.autoenablesDefaultLighting = YES;
     //抗锯齿
     scnView.antialiasingMode = SCNAntialiasingModeMultisampling4X;
     //添加到scnView中去
     [self.view addSubview:scnView];
 
-    SCNCylinder *box = [SCNCylinder cylinderWithRadius:20 height:20];
-    box.firstMaterial.diffuse.contents = [UIImage imageNamed:@"1023.png"];
+    //创建圆柱体
+    SCNCylinder *cylinder = [SCNCylinder cylinderWithRadius:100 height:40];
+    //中间
+    SCNMaterial *centerMaterial = [[SCNMaterial alloc] init];
+    centerMaterial.multiply.wrapS = centerMaterial.diffuse.wrapS = centerMaterial.multiply.wrapT = centerMaterial.diffuse.wrapT = SCNWrapModeRepeat;
+    centerMaterial.lightingModelName = SCNLightingModelConstant;
+    centerMaterial.shininess = 0.1; //光泽
+    centerMaterial.specular.intensity = 0.5; //反射多少光出去
+    centerMaterial.specular.contents = [UIColor grayColor]; //反射出去的光是什么光
+    centerMaterial.specular.contents = [UIColor blueColor]; //当我们此处换为红色的时候地球反光区域所反射出来的光也就是红色
+    //顶部
+    UIImage *sourceImage = [UIImage imageNamed:@"111.jpeg"];
+    UIImage *flippedImage = [UIImage imageWithCGImage:sourceImage.CGImage scale:sourceImage.scale orientation:UIImageOrientationUpMirrored];
+    SCNMaterial *topMaterial = [[SCNMaterial alloc] init];
+    topMaterial.multiply.contents = flippedImage;
+    topMaterial.diffuse.contents = flippedImage;
+    topMaterial.multiply.wrapS = topMaterial.diffuse.wrapS = topMaterial.multiply.wrapT = topMaterial.diffuse.wrapT = SCNWrapModeRepeat;
+    //底部
+    SCNMaterial *bottomMaterial = [[SCNMaterial alloc] init];
+    bottomMaterial.multiply.contents = [UIImage imageNamed:@"111.jpeg"];
+    bottomMaterial.diffuse.contents = [UIImage imageNamed:@"111.jpeg"];
+    bottomMaterial.multiply.wrapS = bottomMaterial.diffuse.wrapS = bottomMaterial.multiply.wrapT = bottomMaterial.diffuse.wrapT = SCNWrapModeRepeat;
     
-    //设置虚拟摄像头
-    SCNNode *node = [SCNNode nodeWithGeometry:box];
-//    node.position = SCNVector3Make(0, 0, -0.5);
+    cylinder.materials = @[centerMaterial, topMaterial, bottomMaterial];
+    
+    //设置实体类
+    SCNNode *node = [SCNNode nodeWithGeometry:cylinder];
+    node.position = SCNVector3Make(0, 0, -0.5);
+//    node.transform = SCNMatrix4Rotate(SCNMatrix4Identity, kDegreesToRadias(8), 0.1, 0, 0);
+//    node.pivot = SCNMatrix4Rotate(node.transform, kDegreesToRadias(8), -0.1, 0, 0);
     [scnView.scene.rootNode addChildNode:node];
     
     //旋转节点
-    SCNAction *customAction = [SCNAction rotateByX:0 y:-1 z:0 duration:1];
-    customAction.duration = 10;
-    SCNAction *repeatAction = [SCNAction repeatActionForever:customAction];
-    [node runAction:repeatAction];
+    SCNAction *customAction = [SCNAction rotateByX:0 y:-1 z:0 duration:10];
+    SCNAction *repeatCustomAction = [SCNAction repeatActionForever:customAction];
+    SCNAction *otherAction = [SCNAction moveBy:SCNVector3Make(0, -50, 0) duration:0.1];
+    SCNAction *otherCustomAction = [SCNAction repeatAction:otherAction count:1];
+    //组动画
+    SCNAction *groupAction = [SCNAction group:@[repeatCustomAction, otherCustomAction]];
+    [node runAction:groupAction];
+    
+    NSMutableArray *imgsArr = [[NSMutableArray alloc] initWithArray:@[@"111.jpeg", @"111.jpeg", @"111.jpeg", @"111.jpeg", @"111.jpeg", @"111.jpeg", @"111.jpeg", @"111.jpeg", @"111.jpeg"]];
+    [YXBallAnimationJoiningImgManager joiningImgByArr:imgsArr contextSize:CGSizeMake((80 + 10) * imgsArr.count, 60) sonWidth:80 sonHeight:60 spacing:10 direction:YXBallAnimationJIMDirectionHorizontalType endImgBlock:^(UIImage * _Nonnull endImg) {
+      
+        centerMaterial.multiply.contents = endImg;
+        centerMaterial.diffuse.contents = endImg;
+    }];
 }
 
 #pragma mark - ballCollection
@@ -272,6 +395,18 @@
     [self.sphereView setCloudTags:array];
     self.sphereView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.sphereView];
+}
+
+#pragma mark - 拼接图片
+- (void)joiningImg {
+    
+    NSMutableArray *imgsArr = [[NSMutableArray alloc] initWithArray:@[@"111.jpeg", @"111.jpeg"]];
+    UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 200, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 200)];
+    [YXBallAnimationJoiningImgManager joiningImgByArr:imgsArr contextSize:imgV.frame.size sonWidth:100 sonHeight:100 spacing:10 direction:YXBallAnimationJIMDirectionHorizontalType endImgBlock:^(UIImage * _Nonnull endImg) {
+      
+        [imgV setImage:endImg];
+    }];
+    [self.view addSubview:imgV];
 }
 
 #pragma mark - 懒加载
